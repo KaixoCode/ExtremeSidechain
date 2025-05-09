@@ -3,7 +3,7 @@ ExtremeSidechain is a simple and free VST plugin effect that does ring mod sidec
 
 
 ## Installation Guide
-Installing this VST is very straightforward. Go to the [Releases](https://github.com/KaixoCode/ExtremeSidechain/releases) tab, select the latest release, and simply download the ZIP file. Then extract the ZIP in a folder named `ExtremeSidechain.vst3/`, and put it in your VST3 folder, which is usually located somewhere like `C:\Program Files\Common Files\VST3`.
+Installing this VST is very straightforward. Go to the [Releases](https://github.com/KaixoCode/ExtremeSidechain/releases) tab, select the latest release, and simply download the ZIP file for your OS. Then extract the ZIP, it should contain a file/folder named `ExtremeSidechain.vst3`, put that in your VST3 folder, which is usually located somewhere like `C:\Program Files\Common Files\VST3`.
 
 ## Questions
 If you have any troubles, questions or suggestions about this plugin you can contact me on Discord `@kaixo`.
