@@ -79,4 +79,6 @@ target_link_libraries(${NAME}
         
 target_precompile_headers(${NAME} PUBLIC "${PROJECT_SOURCE_DIRECTORY}/include/Kaixo/ExtremeSidechain/pch.hpp")
 
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wno-error")
+
 # ==============================================
