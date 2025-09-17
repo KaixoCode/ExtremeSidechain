@@ -45,7 +45,7 @@ jobs:
       - name: Package VST3
         run: |
           mkdir -p package
-          cp -R ${{ steps.strings.outputs.build-dir }}/ExtremeSidechain.vst3 package/
+          cp -R ${{ steps.strings.outputs.build-dir }}/ExtremeSidechain_artefacts/Release/* package/
         shell: bash
 
       - name: Upload artifact
