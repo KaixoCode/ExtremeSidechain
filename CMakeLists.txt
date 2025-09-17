@@ -64,6 +64,19 @@ target_compile_definitions(${NAME}
         JUCE_USE_CURL=0
         JUCE_VST3_CAN_REPLACE_VST2=0)
 
+target_link_libraries(${NAME}
+    PRIVATE
+        juce::juce_core
+        juce::juce_audio_devices
+        juce::juce_audio_utils
+        juce::juce_gui_extra
+        juce::juce_opengl
+        juce::juce_product_unlocking
+    PUBLIC
+        juce::juce_recommended_config_flags
+        juce::juce_recommended_lto_flags
+        juce::juce_recommended_warning_flags)
+        
 target_precompile_headers(${NAME} PUBLIC "${PROJECT_SOURCE_DIRECTORY}/include/Kaixo/ExtremeSidechain/pch.hpp")
 
 # ==============================================
