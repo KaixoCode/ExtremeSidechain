@@ -19,6 +19,9 @@ set(IS_SYNTH false)
 add_subdirectory(JUCE)
 
 set (CMAKE_CXX_STANDARD 23)
+# Necessary for MacOS, otherwise it will try using Objective-C
+set(CMAKE_OBJC_COMPILER "")
+set(CMAKE_OBJCXX_COMPILER "")
 
 project(${NAME} VERSION ${VERSION})
 
