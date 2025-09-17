@@ -11,8 +11,11 @@ set(COMPANY "Kaixo")
 set(COMPANY_CODE "Kaix")
 set(WEBSITE "https://kaixo.me")
 set(BUNDLE_IDENTIFIER "me.kaixo.extremesidechain")
-set(VERSION "1.0.0")
 set(IS_SYNTH false)
+
+if(NOT DEFINED VERSION)
+    set(VERSION "1.0.0")
+endif()
 
 # ==============================================
 
