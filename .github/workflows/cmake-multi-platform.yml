@@ -40,7 +40,7 @@ jobs:
       - name: Package VST3
         run: |
           mkdir -p package
-          cp -R build/ExtremeSidechain_artefacts/Release/* package/
+          cp -R build/ExtremeSidechain_artefacts/Release/VST3/ExtremeSidechain.vst3 package/
         shell: bash
 
       - name: Upload artifact
