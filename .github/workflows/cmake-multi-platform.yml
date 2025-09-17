@@ -60,8 +60,22 @@ jobs:
         with:
           path: ./dist
 
+      # Zip all VST3 folders
+      - name: Zip VST3 folders
+        shell: bash
+        run: |
+          mkdir -p zips
+          for vst3 in ./dist/*; do
+            if [ -d "$vst3" ]; then
+              filename=$(basename "$vst3")
+              zip -r "./zips/${filename}.zip" "$vst3"
+            fi
+          done
+          echo "Zipped artifacts:"
+          ls -l ./zips
+   
       - name: Upload to Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload "${{ github.event.release.tag_name }}" ./dist/* --clobber
+          gh release upload "${{ github.event.release.tag_name }}" ./zips/* --clobber
