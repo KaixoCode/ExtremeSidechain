@@ -20,7 +20,7 @@ add_subdirectory(JUCE)
 
 set (CMAKE_CXX_STANDARD 23)
 
-project(${NAME} VERSION ${VERSION} LANGUAGES C CXX)
+project(${NAME} VERSION ${VERSION})
 
 set(PROJECT_SOURCE_DIRECTORY "${CMAKE_SOURCE_DIR}")
 set(CORE_SOURCE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
@@ -78,7 +78,5 @@ target_link_libraries(${NAME}
         juce::juce_recommended_warning_flags)
         
 target_precompile_headers(${NAME} PUBLIC "${PROJECT_SOURCE_DIRECTORY}/include/Kaixo/ExtremeSidechain/pch.hpp")
-
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wno-error")
 
 # ==============================================
