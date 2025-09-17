@@ -1,0 +1,96 @@
+name: CMake VST3 Build and Release (Windows + macOS)
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag (e.g., v1.0.0)'
+        required: true
+        default: 'v0.0.1'
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest]
+        build_type: [Release]
+        include:
+          - os: windows-latest
+            c_compiler: cl
+            cpp_compiler: cl
+          - os: macos-latest
+            c_compiler: gcc
+            cpp_compiler: g++
+
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          submodules: true
+
+      - name: Configure CMake
+        run: >
+          cmake -B build
+          -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
+          -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
+          -DVERSION=${{ github.event.release.tag_name }}
+          -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+          -S ${{ github.workspace }}
+
+      - name: Build
+        run: cmake --build build --config ${{ matrix.build_type }}
+
+      - name: Package VST3
+        run: |
+          mkdir -p package
+          cp -R build/ExtremeSidechain_artefacts/Release/VST3/ExtremeSidechain.vst3 package/
+        shell: bash
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: vst3-${{ matrix.os }}
+          path: package/*
+
+  attach-release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ./dist
+
+      # Zip all VST3 folders
+      - name: Zip VST3 folders
+        shell: bash
+        run: |
+          mkdir -p zips
+          for vst3 in ./dist/*; do
+            if [ -d "$vst3" ]; then
+              filename=$(basename "$vst3")
+              zip -r "./zips/${filename}.zip" "$vst3"
+            fi
+          done
+   
+      # Create the release
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ github.event.inputs.tag }}
+          release_name: Release ${{ github.event.inputs.tag }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Upload zip files to the release
+      - name: Upload release assets
+        run: gh release upload "${{ github.event.inputs.tag }}" ./zips/* --clobber
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

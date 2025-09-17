@@ -11,8 +11,11 @@ set(COMPANY "Kaixo")
 set(COMPANY_CODE "Kaix")
 set(WEBSITE "https://kaixo.me")
 set(BUNDLE_IDENTIFIER "me.kaixo.extremesidechain")
-set(VERSION "1.0.0")
 set(IS_SYNTH false)
+
+if(NOT DEFINED VERSION)
+    set(VERSION "1.0.0")
+endif()
 
 # ==============================================
 
@@ -20,7 +23,7 @@ add_subdirectory(JUCE)
 
 set (CMAKE_CXX_STANDARD 23)
 
-project(${NAME} VERSION ${VERSION})
+project(${NAME} VERSION ${VERSION} LANGUAGES CXX C)
 
 set(PROJECT_SOURCE_DIRECTORY "${CMAKE_SOURCE_DIR}")
 set(CORE_SOURCE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
@@ -64,6 +67,23 @@ target_compile_definitions(${NAME}
         JUCE_USE_CURL=0
         JUCE_VST3_CAN_REPLACE_VST2=0)
 
+target_link_libraries(${NAME}
+    PRIVATE
+        juce::juce_core
+        juce::juce_audio_devices
+        juce::juce_audio_utils
+        juce::juce_gui_extra
+        juce::juce_opengl
+        juce::juce_product_unlocking
+    PUBLIC
+        juce::juce_recommended_config_flags
+        juce::juce_recommended_lto_flags
+        juce::juce_recommended_warning_flags)
+        
 target_precompile_headers(${NAME} PUBLIC "${PROJECT_SOURCE_DIRECTORY}/include/Kaixo/ExtremeSidechain/pch.hpp")
+if (APPLE) 
+    enable_language(OBJCXX)
+    set_source_files_properties("${PROJECT_SOURCE_DIRECTORY}/include/Kaixo/ExtremeSidechain/pch.hpp" PROPERTIES LANGUAGE OBJCXX)
+endif()
 
 # ==============================================
