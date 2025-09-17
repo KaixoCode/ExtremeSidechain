@@ -1,8 +1,12 @@
-name: CMake VST3 Build (Windows + macOS)
+name: CMake VST3 Build and Release (Windows + macOS)
 
 on:
-  release:
-    types: [created]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag (e.g., v1.0.0)'
+        required: true
+        default: 'v0.0.1'
 
 jobs:
   build:
@@ -72,11 +76,21 @@ jobs:
               zip -r "./zips/${filename}.zip" "$vst3"
             fi
           done
-          echo "Zipped artifacts:"
-          ls -l ./zips
    
-      - name: Upload to Release
+      # Create the release
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ github.event.inputs.tag }}
+          release_name: Release ${{ github.event.inputs.tag }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Upload zip files to the release
+      - name: Upload release assets
+        run: gh release upload "${{ github.event.inputs.tag }}" ./zips/* --clobber
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh release upload "${{ github.event.release.tag_name }}" ./zips/* --clobber
