@@ -21,9 +21,6 @@ add_subdirectory(JUCE)
 set (CMAKE_CXX_STANDARD 23)
 
 project(${NAME} VERSION ${VERSION} LANGUAGES CXX C)
-if(APPLE)
-    enable_language(OBJC)
-endif()
 
 set(PROJECT_SOURCE_DIRECTORY "${CMAKE_SOURCE_DIR}")
 set(CORE_SOURCE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
@@ -81,5 +78,8 @@ target_link_libraries(${NAME}
         juce::juce_recommended_warning_flags)
         
 target_precompile_headers(${NAME} PUBLIC "${PROJECT_SOURCE_DIRECTORY}/include/Kaixo/ExtremeSidechain/pch.hpp")
+if (APPLE) 
+    set_source_files_properties("${PROJECT_SOURCE_DIRECTORY}/include/Kaixo/ExtremeSidechain/pch.hpp" PROPERTIES LANGUAGE OBJCXX)
+endif()
 
 # ==============================================
