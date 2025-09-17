@@ -26,26 +26,21 @@ jobs:
         with:
           submodules: true
 
-      - name: Set reusable strings
-        id: strings
-        shell: bash
-        run: echo "build-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
-
       - name: Configure CMake
         run: >
-          cmake -B ${{ steps.strings.outputs.build-dir }}
+          cmake -B ${{ github.workspace }}/build
           -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
           -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
           -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
           -S ${{ github.workspace }}
 
       - name: Build
-        run: cmake --build ${{ steps.strings.outputs.build-dir }} --config ${{ matrix.build_type }}
+        run: cmake --build ${{ github.workspace }}/build --config ${{ matrix.build_type }}
 
       - name: Package VST3
         run: |
           mkdir -p package
-          cp -R ${{ steps.strings.outputs.build-dir }}/ExtremeSidechain_artefacts/Release/* package/
+          cp -R ${{ github.workspace }}/build/ExtremeSidechain_artefacts/Release/* package/
         shell: bash
 
       - name: Upload artifact
