@@ -19,11 +19,11 @@ set(IS_SYNTH false)
 add_subdirectory(JUCE)
 
 set (CMAKE_CXX_STANDARD 23)
-# Necessary for MacOS, otherwise it will try using Objective-C
-set(CMAKE_OBJC_COMPILER "")
-set(CMAKE_OBJCXX_COMPILER "")
 
-project(${NAME} VERSION ${VERSION})
+project(${NAME} VERSION ${VERSION} LANGUAGES CXX C)
+if(APPLE)
+    enable_language(OBJC)
+endif()
 
 set(PROJECT_SOURCE_DIRECTORY "${CMAKE_SOURCE_DIR}")
 set(CORE_SOURCE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
