@@ -79,6 +79,7 @@ target_link_libraries(${NAME}
         
 target_precompile_headers(${NAME} PUBLIC "${PROJECT_SOURCE_DIRECTORY}/include/Kaixo/ExtremeSidechain/pch.hpp")
 if (APPLE) 
+    enable_language(OBJCXX)
     set_source_files_properties("${PROJECT_SOURCE_DIRECTORY}/include/Kaixo/ExtremeSidechain/pch.hpp" PROPERTIES LANGUAGE OBJCXX)
 endif()
 
